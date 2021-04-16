@@ -155,7 +155,7 @@ public class SuggestionListener extends ListenerAdapter {
             manager.loadAndPlay(event.getTextChannel(), "bark.mp3");
             manager.getGuildMusicManager(event.getGuild()).player.setVolume(70);
 
-            //audioManager.closeAudioConnection();       
+            audioManager.closeAudioConnection();       
             return;
         }
 
@@ -173,7 +173,7 @@ public class SuggestionListener extends ListenerAdapter {
             manager.loadAndPlay(event.getTextChannel(), "spotham.mp3");
             manager.getGuildMusicManager(event.getGuild()).player.setVolume(70);
 
-            //audioManager.closeAudioConnection();       
+            audioManager.closeAudioConnection();       
             return;
         }
 

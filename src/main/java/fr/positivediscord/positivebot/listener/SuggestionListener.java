@@ -113,14 +113,6 @@ public class SuggestionListener extends ListenerAdapter {
             }
         }
 
-        if(event.getAuthor().getId().equals("208957093850513409")){
-            Random vRand = new Random();
-
-            if(25 == vRand.nextInt(150)){
-                event.getChannel().sendMessage("@<208957093850513409> Ouai ouai frerot raconte pas ta vie on s'en bat les couilles").queue();
-            }
-        }
-
         if(prefix[0].equals("!bark")){
             Random vRand = new Random();
             event.getChannel().sendMessage("**Ouaf Ouaf** " + this.aEmoteDog[vRand.nextInt(4)])
@@ -171,7 +163,7 @@ public class SuggestionListener extends ListenerAdapter {
             event.getMessage().delete().queue();
             VoiceChannel activeVoice = event.getMember().getVoiceState().getChannel();
             if(activeVoice == null){
-                event.getChannel().sendMessage("T'es pas dans un vocal sale chien crevé.").queue();
+                event.getChannel().sendMessage("T'es pas dans un channel vocal").queue();
                 return;
             }
             AudioManager audioManager = event.getGuild().getAudioManager();

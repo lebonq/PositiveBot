@@ -76,7 +76,7 @@ public class LolFred implements Runnable{
                         String message = "";
                         
                         if(!vStats.isWin()){
-                            message+="Bravo à Pythaar pour avoir encore lose en "+ vMatch.getGameMode().toLowerCase() + " ! Avec " + vStats.getDeaths() +
+                            message+="Bravo a Pythaar pour avoir encore lose en "+ vMatch.getGameMode().toLowerCase() + " ! Avec " + vStats.getDeaths() +
                             " morts en jouant " + Util.getChampById(vParticipant.getChampionId()) + "\n";
                             if(vStats.getTotalDamageDealtToChampions() < 10000){
                                 message+="Avec seulement " + vStats.getTotalDamageDealtToChampions() + " de damages ahahahah"+ "\n";

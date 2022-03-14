@@ -32,15 +32,17 @@ public class SuggestionListener extends ListenerAdapter {
     private String[] aEmoteDog = new String[4];
     private Guild aGuild;
     private TextChannel aChannel;
+    private boolean aEmotesLoaded;
 
 
     public SuggestionListener(PositiveBot rykordBot) {
         this.rykordBot = rykordBot;
+        
     }
 
     @Override
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
-        initEmotes();
+        if(!this.aEmotesLoaded) initEmotes();
 
         if(this.aPreviousEvent == null){
             this.aGuild = this.rykordBot.getJDA().getGuildById(this.rykordBot.getConfig().guild());
@@ -54,7 +56,7 @@ public class SuggestionListener extends ListenerAdapter {
             if(!(event.getMessage().getAuthor().isBot())){
                 Random vRand = new Random();
 
-                if(vRand.nextInt(11) == 5){
+                if(vRand.nextInt(21) == 5){
                     this.aChannel.sendMessage( event.getAuthor().getAsMention() + " me chuchotte : ").queue();
                 }
                 else{
@@ -67,10 +69,11 @@ public class SuggestionListener extends ListenerAdapter {
                     String vExtention = vAttachement.get(0).getFileExtension();
                     CompletableFuture<File> vFileDownloading = vAttachement.get(0).downloadToFile("temp." + vExtention);
 
-                    while(vFileDownloading.isDone()){}
+                    while(!vFileDownloading.isDone());
                     
                     File vFile = new File("temp." +vExtention);
                     this.aChannel.sendFile(vFile).queue();
+                    vFile.deleteOnExit();
                     return;
                 }
                 this.aChannel.sendMessage(event.getMessage()).queue();
@@ -103,10 +106,19 @@ public class SuggestionListener extends ListenerAdapter {
         }
 
         String vMessage = event.getMessage().getContentDisplay();
+
+        if((vMessage.toLowerCase().contains(" ratio ") 
+        || vMessage.toLowerCase().contains("ratio ") 
+        || vMessage.toLowerCase().contains(" ratio")
+        || vMessage.equalsIgnoreCase("ratio"))
+        && !event.getAuthor().isBot()){
+            event.getChannel().sendMessage("Je suis " + event.getAuthor().getAsMention() + "\nje rentre à la maison après ma vasectomie\nj'entends des gémissements et des gifles venant de la chambre de ma femme.\nça doit encore être Chad\nje sais qu'ils veulent de l'intimité, je m'assois devant mon ordinateur\nJe me connecte au discord\nJe perçois un message que je peux ratio et  je glousse en écoutant ma femme me supplier de lui donner les gènes que je ne peux pas lui donner.\nsucer la poussière de cheeto sur mes doigts alors que je commence à taper mon ratio pixel\nricaner en imaginant les intellectuels du discord lisant mon commentaire incroyablement spirituel et original\nj'entends ma femme gémir d'extase quand Chad inonde son utérus fertile de sa semence.\nc'était une bonne journée\nje vais recevoir beaucoup d'applaudissements pour mon impressionnante contribution à la culture internet, et Chad pourrait même me laisser manger son sperme dans la chatte de ma femme s'il trouve mon commentaire assez drôle").queue();
+        }
+
         if(event.getAuthor().getId().equals("208937829936398346") && (vMessage.contains("i") || vMessage.contains("I"))){
             Random vRand = new Random();
 
-            if(25 == vRand.nextInt(51)){
+            if(25 == vRand.nextInt(101)){
                 vMessage = vMessage.replaceAll("i", "i̊");
                 vMessage = vMessage.replaceAll("I", "i̊");
                 event.getChannel().sendMessage(vMessage).queue();
@@ -143,7 +155,7 @@ public class SuggestionListener extends ListenerAdapter {
 
         if(prefix[0].equals("!!bark")){
             event.getMessage().delete().queue();
-            VoiceChannel activeVoice = event.getMember().getVoiceState().getChannel();
+            AudioChannel activeVoice = event.getMember().getVoiceState().getChannel();
             if(activeVoice == null){
                 event.getChannel().sendMessage("T'es pas dans un vocal sale chien crevé.").queue();
                 return;
@@ -152,16 +164,16 @@ public class SuggestionListener extends ListenerAdapter {
             audioManager.openAudioConnection(activeVoice); 
 
             PlayerManager manager = PlayerManager.getInstance();
+            manager.getGuildMusicManager(event.getGuild()).player.stopTrack();
             manager.loadAndPlay(event.getTextChannel(), "bark.mp3");
             manager.getGuildMusicManager(event.getGuild()).player.setVolume(70);
-
-            audioManager.closeAudioConnection();       
+       
             return;
         }
 
         if(prefix[0].equals("!!cri")){
             event.getMessage().delete().queue();
-            VoiceChannel activeVoice = event.getMember().getVoiceState().getChannel();
+            AudioChannel activeVoice = event.getMember().getVoiceState().getChannel();
             if(activeVoice == null){
                 event.getChannel().sendMessage("T'es pas dans un channel vocal").queue();
                 return;
@@ -170,11 +182,37 @@ public class SuggestionListener extends ListenerAdapter {
             audioManager.openAudioConnection(activeVoice); 
 
             PlayerManager manager = PlayerManager.getInstance();
-            manager.loadAndPlay(event.getTextChannel(), "spotham.mp3");
+            manager.loadAndPlay(event.getTextChannel(), "cri.mp3");
             manager.getGuildMusicManager(event.getGuild()).player.setVolume(70);
-
-            audioManager.closeAudioConnection();       
+      
             return;
+        }
+
+        if(prefix[0].equals("!!addmusic")){
+            String idMusic = vMessage.split(" ")[1].split("=")[1];
+            Log.info(idMusic);
+            event.getMessage().delete().queue();
+            AudioChannel activeVoice = event.getMember().getVoiceState().getChannel();
+            if(activeVoice == null){
+                event.getChannel().sendMessage("T'es pas dans un channel vocal").queue();
+                return;
+            }
+            AudioManager audioManager = event.getGuild().getAudioManager();
+            audioManager.openAudioConnection(activeVoice); 
+
+            PlayerManager manager = PlayerManager.getInstance();
+            manager.loadAndPlay(event.getTextChannel(), idMusic);
+            manager.getGuildMusicManager(event.getGuild()).player.setVolume(70);
+     
+            return;
+        }
+
+        if(prefix[0].equals("!!quit")){
+            event.getGuild().getAudioManager().closeAudioConnection();
+        }
+
+        if(prefix[0].equals("!!next")){
+            PlayerManager.getInstance().getGuildMusicManager(event.getGuild()).scheduler.nextTrack();
         }
 
         this.aPreviousEvent = event;
@@ -196,6 +234,7 @@ public class SuggestionListener extends ListenerAdapter {
             this.aEmoteDog[1] = ":service_dog:";
             this.aEmoteDog[2] = ":dog2:";
             this.aEmoteDog[3] = ":guide_dog:";
+            this.aEmotesLoaded = true;
         }
     }
 }

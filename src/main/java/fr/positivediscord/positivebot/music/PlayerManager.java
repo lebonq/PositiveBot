@@ -47,6 +47,7 @@ public class PlayerManager {
             @Override
             public void trackLoaded(AudioTrack track) {
                 play(musicManager, track);
+                channel.sendMessage("Adding to queue " + track.getInfo().title).queue();
             }
 
             @Override
@@ -64,7 +65,7 @@ public class PlayerManager {
 
             @Override
             public void noMatches() {
-                
+                channel.sendMessage("Ce son n'existe pas gros bouffon.").queue();
             }
 
             @Override

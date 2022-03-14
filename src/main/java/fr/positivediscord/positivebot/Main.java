@@ -32,8 +32,8 @@ public class Main {
         Runtime.getRuntime().addShutdownHook(new Thread(bot::close));
         bot.run();
         
-        LolFred lolapi = new LolFred(bot);
-        lolapi.run();
+        //LolFred lolapi = new LolFred(bot);
+        //lolapi.run();
 
     }
 }

@@ -1,0 +1,2 @@
+const mvn = require("maven").create({cwd: "."})
+mvn.execute("package","-f pom.xml")

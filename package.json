@@ -7,7 +7,7 @@
       "build": "node build"
     },
     "dependencies": {
-        "maven": "5.0.0"
+        "maven": "^5.0.0"
       },
     "repository": {
       "type": "git",

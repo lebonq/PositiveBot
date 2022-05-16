@@ -47,7 +47,7 @@ public class PlayerManager {
             @Override
             public void trackLoaded(AudioTrack track) {
                 play(musicManager, track);
-                channel.sendMessage("Adding to queue " + track.getInfo().title).queue();
+                channel.sendMessage("Adding to queue " + track.getInfo().title +"\n https://www.youtube.com/watch?v=" +  trackUrl).queue();
             }
 
             @Override
@@ -58,11 +58,10 @@ public class PlayerManager {
                     firstTrack = playlist.getTracks().get(0);
                     for (AudioTrack track : playlist.getTracks()) {
                         play(musicManager, track);
-                        channel.sendMessage("Adding to queue " + track.getInfo().title + " (from playlist " + playlist.getName() + ")").queue();
+
                     }
                 }
-
-                
+                channel.sendMessage("Adding to queue playlist : " + playlist.getName() +"\n https://www.youtube.com/playlist?list=" +  trackUrl).queue();
 
             }
 

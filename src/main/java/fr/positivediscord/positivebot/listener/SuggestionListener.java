@@ -215,6 +215,10 @@ public class SuggestionListener extends ListenerAdapter {
             PlayerManager.getInstance().getGuildMusicManager(event.getGuild()).scheduler.nextTrack();
         }
 
+        if(prefix[0].equals("!!clear")){
+            PlayerManager.getInstance().getGuildMusicManager(event.getGuild()).scheduler.clearTracks();
+        }
+
         this.aPreviousEvent = event;
     }
 

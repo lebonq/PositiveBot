@@ -56,11 +56,14 @@ public class PlayerManager {
 
                 if (firstTrack == null) {
                     firstTrack = playlist.getTracks().get(0);
+                    for (AudioTrack track : playlist.getTracks()) {
+                        play(musicManager, track);
+                        channel.sendMessage("Adding to queue " + track.getInfo().title + " (from playlist " + playlist.getName() + ")").queue();
+                    }
                 }
 
-                channel.sendMessage("Adding to queue " + firstTrack.getInfo().title + " (first track of playlist " + playlist.getName() + ")").queue();
+                
 
-                play(musicManager, firstTrack);
             }
 
             @Override
